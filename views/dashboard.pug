@@ -6,4 +6,5 @@ html(lang='en')
   body
     app-container
     script.
-      axios.get('/api/people');
+      axios.get('/proxy/alfresco/api/people');
+      axios.post('/proxy/alfresco/slingshot/profile/userstatus', { status: 'test'});

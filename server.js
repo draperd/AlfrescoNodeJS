@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3001;
 
 // Create the default address of the Alfresco repository...
 const REPO = process.env.REPOSITORY || 'localhost';
-const REPO_PORT = process.env.REPOSITORY || 8080;
+const REPO_PORT = process.env.REPOSITORY_PORT || 8080;
 
 // Create a new server
 const server = express();
@@ -129,7 +129,7 @@ server.get('/dashboard',
   }
 );
 
-// Create auth routes
+// Create authentication routes
 const authRoutes = express.Router();
 
 authRoutes.post('/login',
@@ -143,22 +143,32 @@ authRoutes.post('/login',
 server.use('/auth', authRoutes);
 
 
-// Create API routes
+// Create API routes for handling requests to the Alfresco Repository
 const apiRoutes = express.Router();
 apiRoutes.use(isAuthenticated);
 
-apiRoutes.get('/*', (inReq, outRes) => {
+// This is a re-usable handler function for handling proxy requests to the
+// Alfresco repository. It is passed as a callback handler to each of the standard
+// HTTP methods for the /proxy/alfresco route...
+const proxyRequestHandler = function(method, inReq, outRes) {
+   // Need to handle any request parameters that are supplied appropriately...
+   var delimiter = inReq.url.indexOf('?') === -1 ? '?' : '&';
+
+   // Set up the request options (ensuring that we append the user session ticket)
+   // so that the request is authenticated...
    var options = {
       hostname: REPO,
       port: REPO_PORT,
-      path: '/alfresco/service/api' + inReq.url + '?alf_ticket=' + inReq.user.ticket,
-      method: 'GET',
+      path: '/alfresco/service' + inReq.url + delimiter + 'alf_ticket=' + inReq.user.ticket,
+      method: method,
       headers: {
          'Content-Type': 'application/json'
       }
    };
 
-   var req = http.get(options, (res) => {
+   // Make and handle the request
+   // TODO: The error handling needs to be improved here...
+   var req = http.request(options, (res) => {
       res.setEncoding('utf8');
       let rawData = '';
       res.on('data', (chunk) => {
@@ -172,17 +182,33 @@ apiRoutes.get('/*', (inReq, outRes) => {
          }
          else
          {
-            console.log('Not ok: ', res.statusCode);
+            outRes.status(res.statusCode).send(rawData);
          }
       });
    });
 
    req.on('error', (e) => {
-      console.log('Error: ', e);
+      outRes.status(500).send(e);
    });
-});
 
-server.use('/api', apiRoutes);
+   if (inReq.body)
+   {
+      req.write(JSON.stringify(inReq.body));
+   }
+   req.end();
+};
+
+// Map all the standard HTTP methods here (this isn't the comprehensive set, but
+// should be sufficient for the time being)...
+apiRoutes.get('/*', (inReq, outRes) => proxyRequestHandler('GET', inReq, outRes));
+apiRoutes.post('/*', (inReq, outRes) => proxyRequestHandler('POST', inReq, outRes));
+apiRoutes.put('/*', (inReq, outRes) => proxyRequestHandler('PUT', inReq, outRes));
+apiRoutes.delete('/*', (inReq, outRes) => proxyRequestHandler('DELETE', inReq, outRes));
+
+// Set up the server to map all URLs beginning with /proxy/alfresco to be sent
+// to the Alfresco Repository - this mirrors the behavior currently found in 
+// Alfresco Share...
+server.use('/proxy/alfresco', apiRoutes);
 
 // Start the server
 server.listen(PORT, () => {
