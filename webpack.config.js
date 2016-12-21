@@ -7,6 +7,7 @@ module.exports = {
    entry: {
      app: './app.js'
    },
+   devtool: 'source-map',
    output: {
       path: __dirname + '/dist',
       filename: '[name].bundle.js',
@@ -30,5 +31,10 @@ module.exports = {
             use: ['style-loader', 'css-loader'],
          }
       ]
+   },
+   resolve: {
+      alias: {
+         'vue$': 'vue/dist/vue.common.js'
+      }
    }
 };

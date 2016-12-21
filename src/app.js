@@ -1,4 +1,23 @@
+import Vue from 'vue';
 import axios from 'axios';
 
-axios.get('/proxy/alfresco/api/people');
-axios.post('/proxy/alfresco/slingshot/profile/userstatus', { status: 'test'});
+Vue.component('alf-list', {
+   template: `<ul id="example-1">
+      <li v-for="item in items">
+       {{ item.node.properties["cm:name"] }}
+     </li>
+   </ul>`,
+   data: () => ({
+      items: [],
+   }),
+   beforeMount() {
+      axios.get('/proxy/alfresco/slingshot/doclib2/doclist/all/node/alfresco/company/home')
+         .then(response => {
+            this.items = response.data.items;
+         });
+   }
+});
+
+var vm = new Vue({
+   el: '#app'
+});
