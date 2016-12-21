@@ -169,7 +169,7 @@ const proxyRequestHandler = function(method, inReq, outRes) {
    var options = {
       hostname: REPO,
       port: REPO_PORT,
-      path: '/alfresco/service' + inReq.url + delimiter + 'alf_ticket=' + inReq.user.ticket,
+      path: '/alfresco' + inReq.url + delimiter + 'alf_ticket=' + inReq.user.ticket,
       method: method,
       headers: {
          'Content-Type': 'application/json'

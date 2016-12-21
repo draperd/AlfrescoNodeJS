@@ -3,26 +3,30 @@ import axios from 'axios';
 
 Vue.component('alf-list', {
    template: `<div>
-      <slot name="view" :items="items">No view configured</slot>
+      <slot name="before-view" :list="list"></slot>
+      <slot name="view" :list="list">No view configured</slot>
    </div>`,
    data: () => ({
-      items: [],
+      list: {},
    }),
    beforeMount() {
-      axios.get('/proxy/alfresco/slingshot/doclib2/doclist/all/node/alfresco/company/home')
+      axios.get('/proxy/alfresco/api/-default-/public/alfresco/versions/1/nodes/-root-/children')
          .then(response => {
-            this.items = response.data.items;
+            this.list = response.data.list;
          });
    }
 });
 
 Vue.component('alf-list-view', {
    template: `<ul>
-      <li v-for="item in items">
-       {{ item.node.properties["cm:name"] }}
-     </li>
+      <li v-for="item in list.entries">{{item.entry.name}}</li>
    </ul>`,
-   props: ['items']
+   props: ['list']
+});
+
+Vue.component('alf-list-toolbar', {
+   template: `<span><button>Page up</button><button>Page Down</button></span>`,
+   props: ['list']
 });
 
 var vm = new Vue({
