@@ -6,6 +6,12 @@ const LocalStrategy = require('passport-local');
 const http = require('http');
 const flash = require('flash');
 
+// Setup webpack middleware...
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const webpackConfig = require('./webpack.config');
+const compiler = webpack(webpackConfig);
+
 // Create default port
 const PORT = process.env.PORT || 3001;
 
@@ -20,6 +26,10 @@ const server = express();
 const sessionTokens = {};
 
 // Configure server
+server.use(webpackDevMiddleware(compiler, {
+  publicPath: '/' // Same as `output.publicPath` in most cases.
+}));
+
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(session({
