@@ -1,19 +1,50 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+// Create a new Vue as an event bus...
+var bus = new Vue();
+
 Vue.component('alf-list', {
    template: `<div>
       <slot name="before-view" :list="list"></slot>
       <slot name="view" :list="list">No view configured</slot>
    </div>`,
    data: () => ({
+      skipCount: 0,
+      maxItems: 3,
       list: {},
    }),
    beforeMount() {
-      axios.get('/proxy/alfresco/api/-default-/public/alfresco/versions/1/nodes/-root-/children')
-         .then(response => {
-            this.list = response.data.list;
-         });
+      this.getData();
+   },
+   created() {
+      bus.$on('pageForward', this.pageForward);
+      bus.$on('pageBack', this.pageBack);
+   },
+   beforeDestroy() {
+      bus.$off(); // Remove all event listeners as part of clean-up
+   },
+   methods: {
+      pageBack: function() {
+         if (this.list.pagination.skipCount)
+         {
+            this.skipCount -= this.maxItems;
+            this.getData();
+         }
+      },
+      pageForward: function() {
+         if (this.list.pagination.hasMoreItems)
+         {
+            this.skipCount += this.maxItems;
+            this.getData();
+         }
+      },
+      getData: function() {
+         axios.get(`/proxy/alfresco/api/-default-/public/alfresco/versions/1/nodes/-root-/children?skipCount=${this.skipCount}&maxItems=${this.maxItems}`)
+            .then(response => {
+               this.list = response.data.list;
+            });
+      }
    }
 });
 
@@ -25,8 +56,19 @@ Vue.component('alf-list-view', {
 });
 
 Vue.component('alf-list-toolbar', {
-   template: `<span><button>Page up</button><button>Page Down</button></span>`,
-   props: ['list']
+   template:  `<span>
+                  <button v-on:click="back()">Page Back</button>
+                  <button v-on:click="forward()">Page Forward</button>
+               </span>`,
+   props: ['list'],
+   methods: {
+      back: function() {
+         bus.$emit('pageBack');
+      },
+      forward: function() {
+         bus.$emit('pageForward');
+      }
+   }
 });
 
 var vm = new Vue({
