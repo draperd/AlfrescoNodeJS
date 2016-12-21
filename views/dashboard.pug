@@ -6,4 +6,6 @@ html(lang='en')
    body
       div#app
          alf-list
+            template(scope="props" slot="view")
+               alf-list-view(:items="props.items")
       script(src="/app.bundle.js")
