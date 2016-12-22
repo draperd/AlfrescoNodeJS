@@ -5,9 +5,4 @@ html(lang='en')
       
    body
       div#app
-         alf-list
-            template(scope="props" slot="before-view")
-               alf-list-toolbar(:list="props.list")
-            template(scope="props" slot="view")
-               alf-list-view(:list="props.list")
       script(src="/app.bundle.js")
