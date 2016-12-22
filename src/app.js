@@ -1,7 +1,11 @@
 import Vue from 'vue';
 import axios from 'axios';
 
-// Create a new Vue as an event bus...
+// Create a new Vue as an event bus.
+// This has been necessary because I've not figured out how to handle custom events
+// between components
+// This is going to need to be updated when the components are split into different
+// files!
 var bus = new Vue();
 
 Vue.component('alf-list', {
@@ -12,7 +16,12 @@ Vue.component('alf-list', {
    data: () => ({
       skipCount: 0,
       maxItems: 3,
-      list: {},
+      list: {
+         pagination: {
+            skipCount: 0,
+            maxItems: 3
+         }
+      },
    }),
    beforeMount() {
       this.getData();
@@ -58,6 +67,7 @@ Vue.component('alf-list-view', {
 Vue.component('alf-list-toolbar', {
    template:  `<span>
                   <button v-on:click="back()">Page Back</button>
+                  <span>{{ list.pagination.skipCount / list.pagination.maxItems + 1}}
                   <button v-on:click="forward()">Page Forward</button>
                </span>`,
    props: ['list'],
