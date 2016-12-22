@@ -1,0 +1,93 @@
+{
+   "list": {
+      "pagination": {
+         "count": 3,
+         "hasMoreItems": true,
+         "totalItems": 7,
+         "skipCount": 0,
+         "maxItems": 3
+      },
+      "entries": [{
+         "entry": {
+            "createdAt": "2016-12-20T09:32:47.842+0000",
+            "path": {
+               "name": "/Company Home",
+               "isComplete": true,
+               "elements": [{
+                  "id": "5c7e8585-f9bb-47fe-a2d4-fc5a158f143a",
+                  "name": "Company Home"
+               }]
+            },
+            "isFolder": true,
+            "isFile": false,
+            "createdByUser": {
+               "id": "System",
+               "displayName": "System"
+            },
+            "modifiedAt": "2016-12-20T09:33:10.144+0000",
+            "modifiedByUser": {
+               "id": "System",
+               "displayName": "System"
+            },
+            "name": "Data Dictionary",
+            "id": "7b355f08-80a2-4b05-b166-1ac304bd6077",
+            "nodeType": "cm:folder",
+            "parentId": "5c7e8585-f9bb-47fe-a2d4-fc5a158f143a"
+         }
+      }, {
+         "entry": {
+            "createdAt": "2016-12-20T09:32:48.118+0000",
+            "path": {
+               "name": "/Company Home",
+               "isComplete": true,
+               "elements": [{
+                  "id": "5c7e8585-f9bb-47fe-a2d4-fc5a158f143a",
+                  "name": "Company Home"
+               }]
+            },
+            "isFolder": true,
+            "isFile": false,
+            "createdByUser": {
+               "id": "System",
+               "displayName": "System"
+            },
+            "modifiedAt": "2016-12-20T09:32:48.118+0000",
+            "modifiedByUser": {
+               "id": "System",
+               "displayName": "System"
+            },
+            "name": "Guest Home",
+            "id": "22dd3215-9e3e-4a93-a2a3-4eaa2a716276",
+            "nodeType": "cm:folder",
+            "parentId": "5c7e8585-f9bb-47fe-a2d4-fc5a158f143a"
+         }
+      }, {
+         "entry": {
+            "createdAt": "2016-12-20T09:32:48.201+0000",
+            "path": {
+               "name": "/Company Home",
+               "isComplete": true,
+               "elements": [{
+                  "id": "5c7e8585-f9bb-47fe-a2d4-fc5a158f143a",
+                  "name": "Company Home"
+               }]
+            },
+            "isFolder": true,
+            "isFile": false,
+            "createdByUser": {
+               "id": "System",
+               "displayName": "System"
+            },
+            "modifiedAt": "2016-12-20T09:32:48.201+0000",
+            "modifiedByUser": {
+               "id": "System",
+               "displayName": "System"
+            },
+            "name": "Imap Attachments",
+            "id": "23aced70-472d-4d4a-a39e-ce41bd653908",
+            "nodeType": "cm:folder",
+            "parentId": "5c7e8585-f9bb-47fe-a2d4-fc5a158f143a"
+         }
+      }]
+   }
+}

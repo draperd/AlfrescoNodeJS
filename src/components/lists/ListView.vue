@@ -2,7 +2,8 @@
 
 <template>
    <ul>
-      <li v-for="item in list.entries"
+      <li class="components-lists-ListView__item"
+          v-for="item in list.entries"
           @click="navigate(item, $event)">{{item.entry.name}}</li>
    </ul>
 </template>

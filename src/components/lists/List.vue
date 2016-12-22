@@ -18,6 +18,7 @@
    import Vue from 'vue';
    import axios from 'axios';
 
+   import NodeService from '../../services/NodeService';
    import ListView from './ListView.vue';
    import Toolbar from './Toolbar.vue';
    import Breadcrumb from './Breadcrumb.vue';
@@ -35,6 +36,7 @@
          }
       }),
       beforeMount() {
+         this.nodeService = new NodeService();
          this.getData();
       },
       methods: {
@@ -53,10 +55,18 @@
             }
          },
          getData: function() {
-            axios.get(`/proxy/alfresco/api/-default-/public/alfresco/versions/1/nodes/-root-/children?include=path&skipCount=${this.skipCount}&maxItems=${this.maxItems}&relativePath=${this.relativePath}`)
+            this.nodeService.getItems({
+               skipCount: this.skipCount,
+               maxItems: this.maxItems,
+               relativePath: this.relativePath
+            })
                .then(response => {
                   this.list = response.data.list;
                });
+            // axios.get(`/proxy/alfresco/api/-default-/public/alfresco/versions/1/nodes/-root-/children?include=path&skipCount=${this.skipCount}&maxItems=${this.maxItems}&relativePath=${this.relativePath}`)
+               // .then(response => {
+               //    this.list = response.data.list;
+               // });
          },
          navigate: function(item) {
             this.skipCount = 0;
