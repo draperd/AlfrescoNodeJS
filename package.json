@@ -4,6 +4,7 @@
     "unit": "karma start test/unit/karma.conf.js --single-run"
   },
   "devDependencies": {
+    "alfresco-auth-router": "^0.0.1",
     "axios": "^0.15.3",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
