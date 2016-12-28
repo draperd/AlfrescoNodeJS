@@ -7,8 +7,10 @@ import BreadcrumbUtil from '../../../src/components/lists/Breadcrumb';
 describe('Breadcrumb Util', () => {
    it('should generate home breadcrumb for root', () => {
       
-      let breadcrumbs = BreadcrumbUtil.createBreadcrumbs('/');
-      expect(breadcrumbs).to.have.lengthOf(1);
+      let breadcrumbs = BreadcrumbUtil.createBreadcrumbs({
+         relativePath: '/'
+      });
+      expect(breadcrumbs.breadcrumbs).to.have.lengthOf(1);
     
   });
 });

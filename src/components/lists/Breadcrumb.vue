@@ -17,6 +17,8 @@
 </template>
 
 <script>
+   import BreadcrumbUtil from './Breadcrumb';
+
    export default {
       props: ['relativePath'],
       beforeMount() {
@@ -27,24 +29,10 @@
       },
       watch: {
          relativePath: function() {
-            let lastPathElement = '/';
-            this.breadcrumbs = [{
-               label: 'Home',
-               relativePath: lastPathElement
-            }];
-            this.relativePath
-               .split('/')
-               .filter(function(name) {
-                  return name.trim() !== '';
-               })
-               .forEach(function(pathElement) {
-                  let relativePath = lastPathElement + pathElement + '/'
-                  this.breadcrumbs.push({
-                     label: pathElement,
-                     relativePath: relativePath
-                  });
-                  lastPathElement = relativePath;
-               }, this);
+            let breadcrumbData = BreadcrumbUtil.createBreadcrumbs({
+               relativePath: this.relativePath
+            });
+            this.breadcrumbs = breadcrumbData.breadcrumbs;
          }
       },
       methods: {
